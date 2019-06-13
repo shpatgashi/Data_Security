@@ -25,8 +25,8 @@ namespace SDH_Client
         public Client()
         {
             InitializeComponent();
-            client = new TcpClient(hostName, portNum);
-            ns = client.GetStream();
+    //        client = new TcpClient(hostName, portNum);
+  //          ns = client.GetStream();
 
             //thread = new Thread();
             //thread.Start();

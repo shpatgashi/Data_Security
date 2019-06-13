@@ -37,15 +37,17 @@ namespace SDH_Server
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            try
-            {
-                DBCONNECTION dbcon = new DBCONNECTION();
-                MessageBox.Show("Connected");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Fail");
-            }
+          
+        }
+    
+        private void btnInsert_Click(object sender, EventArgs e)
+        {
+            Models models = new Models(txtUsername.Text, txtPass.Text, txtPosition.Text, Double.Parse(txtSalary.Text),
+                int.Parse(txtBonuses.Text), int.Parse(txtExperience.Text));
+
+            models.InsertWorker(txtUsername.Text, txtPass.Text, txtPosition.Text, Double.Parse(txtSalary.Text),
+                int.Parse(txtBonuses.Text), int.Parse(txtExperience.Text));
+            MessageBox.Show("OK");
         }
     }
 }
