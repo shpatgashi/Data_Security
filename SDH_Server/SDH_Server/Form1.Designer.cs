@@ -35,6 +35,7 @@
             this.txtPosition = new System.Windows.Forms.TextBox();
             this.txtBonuses = new System.Windows.Forms.TextBox();
             this.txtExperience = new System.Windows.Forms.TextBox();
+            this.btnStart = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtUsername
@@ -89,11 +90,22 @@
             this.txtExperience.Size = new System.Drawing.Size(161, 20);
             this.txtExperience.TabIndex = 6;
             // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(450, 62);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 7;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
             // Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.txtExperience);
             this.Controls.Add(this.txtBonuses);
             this.Controls.Add(this.txtPosition);
@@ -104,7 +116,6 @@
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Server";
             this.Text = "Server";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -119,6 +130,7 @@
         private System.Windows.Forms.TextBox txtPosition;
         private System.Windows.Forms.TextBox txtBonuses;
         private System.Windows.Forms.TextBox txtExperience;
+        private System.Windows.Forms.Button btnStart;
     }
 }
 

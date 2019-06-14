@@ -66,7 +66,7 @@ namespace SDH_Server
             {
                 try
                 {
-                    connection.Close();
+                         connection.Close();
                     return true;
                 }
                 catch (MySqlException ex)
