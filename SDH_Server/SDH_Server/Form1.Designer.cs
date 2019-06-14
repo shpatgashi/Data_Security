@@ -30,11 +30,12 @@
         {
             this.btnStart = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(600, 76);
+            this.btnStart.Location = new System.Drawing.Point(35, 22);
             this.btnStart.Margin = new System.Windows.Forms.Padding(4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(100, 28);
@@ -45,7 +46,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(555, 129);
+            this.btnExport.Location = new System.Drawing.Point(167, 12);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(183, 92);
             this.btnExport.TabIndex = 8;
@@ -53,11 +54,20 @@
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(35, 110);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(315, 180);
+            this.richTextBox1.TabIndex = 9;
+            this.richTextBox1.Text = "";
+            // 
             // Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnStart);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -70,6 +80,7 @@
         #endregion
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 
