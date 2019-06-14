@@ -43,14 +43,7 @@ namespace SDH_Server
         Thread thread = null;
         
     
-        private void btnInsert_Click(object sender, EventArgs e)
-        {
-
-            InsertWorker(txtUsername.Text, txtPass.Text, txtPosition.Text,
-            Double.Parse(txtSalary.Text), Int16.Parse(txtBonuses.Text), Int16.Parse(txtExperience.Text));
-
-        }
-
+        
         private void InsertWorker(string username, string userPassword, string position, double salary, int bonuses, int experience)
         {
             string query = "INSERT INTO worker(username, password, salt, position,salary,bonuses, experience) " +
@@ -150,65 +143,52 @@ namespace SDH_Server
 
         }
 
-        private void InsertWorker(string username, string userPassword, string position, double salary, int bonuses, int experience)
-        {
-            string query = "INSERT INTO worker(username, password, salt, position,salary,bonuses, experience) " +
-                 "VALUES (@user,@password, @salt, @position, @salary, @bonuses, @experience)";
+        
 
-            MySqlConnection getConn = conn.getConnection();
+
+        
+        private void getUser(string username)
+        {
+            string query = "Select * from worker where username = @username";
 
 
             try
             {
+                MySqlConnection getConn = conn.getConnection();
+
                 getConn.Open();
 
                 MySqlCommand cmd = new MySqlCommand(query, conn.getConnection());
 
-                // prepared statement binding values
 
-
-                MySqlParameter userParameter = new MySqlParameter("@user", MySqlDbType.Text, 45);
+                MySqlParameter userParameter = new MySqlParameter("@username", MySqlDbType.Text, 45);
                 userParameter.Value = username;
-                MySqlParameter passwordParameter = new MySqlParameter("@password", MySqlDbType.Text, 45);
-                passwordParameter.Value = generateSaltedHashPassword(userPassword, generateSalt());
-                MySqlParameter saltParameter = new MySqlParameter("@salt", MySqlDbType.Text);
-                saltParameter.Value = generateSalt();
-                MySqlParameter positionParameter = new MySqlParameter("@position", MySqlDbType.Text);
-                positionParameter.Value = position;
-                MySqlParameter salaryParameter = new MySqlParameter("@salary", MySqlDbType.Double);
-                salaryParameter.Value = salary;
-                MySqlParameter bonusesParameter = new MySqlParameter("@bonuses", MySqlDbType.Int16);
-                bonusesParameter.Value = bonuses;
-                MySqlParameter experienceParameter = new MySqlParameter("@experience", MySqlDbType.Int16);
-                experienceParameter.Value = experience;
-
-
-
                 cmd.Parameters.Add(userParameter);
-                cmd.Parameters.Add(passwordParameter);
-                cmd.Parameters.Add(saltParameter);
-                cmd.Parameters.Add(positionParameter);
-                cmd.Parameters.Add(salaryParameter);
-                cmd.Parameters.Add(bonusesParameter);
-                cmd.Parameters.Add(experienceParameter);
 
                 cmd.Prepare();
 
-                if (cmd.ExecuteNonQuery() > 0)
-                {
-                    MessageBox.Show("Row Added !");
 
-                }
-                else { MessageBox.Show("FAIL"); }
+                DataSet ds = new DataSet();
+                MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter(cmd);
+                mySqlDataAdapter.Fill(ds);
 
                 getConn.Close();
+                if (ds.Tables[0].Rows.Count == 0)
+                {
+                    MessageBox.Show("An error occured ...");
+                }
+                else
+                {
+                    MessageBox.Show("Your info : \nUsername: " + username + "\nPosition : " + ds.Tables[0].Rows[0]["position"].ToString()
+                        + "\nSalary : " + ds.Tables[0].Rows[0]["salary"].ToString() + "\nBonuses : " + ds.Tables[0].Rows[0]["bonuses"].ToString()
+                        + "\nExperience : " + ds.Tables[0].Rows[0]["experience"].ToString());
 
+                }
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Error : " + ex);
             }
-
 
         }
 
@@ -269,5 +249,19 @@ namespace SDH_Server
 
         }
 
+       
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            xmlenc rsakey = new xmlenc();
+            try
+            {
+                rsakey.exportPublicKey();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+        }
     }
 }

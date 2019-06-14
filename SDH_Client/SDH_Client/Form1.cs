@@ -31,8 +31,9 @@ namespace SDH_Client
             //thread = new Thread();
             //thread.Start();
         }
+        
 
-        private void Client_Load(object sender, EventArgs e)
+        private void btnLogin_Click(object sender, EventArgs e)
         {
 
         }
