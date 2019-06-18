@@ -134,6 +134,16 @@ namespace SDH_Server
         {
             listener = new System.Net.Sockets.TcpListener(2020);
             listener.Start();
+            xmlenc rsakey = new xmlenc();
+            try
+            {
+                rsakey.exportPublicKey();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
 
             client = listener.AcceptTcpClient();
             ns = client.GetStream();
@@ -249,19 +259,6 @@ namespace SDH_Server
 
         }
 
-       
-        private void btnExport_Click(object sender, EventArgs e)
-        {
-            xmlenc rsakey = new xmlenc();
-            try
-            {
-                rsakey.exportPublicKey();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            
-        }
+      
     }
 }
