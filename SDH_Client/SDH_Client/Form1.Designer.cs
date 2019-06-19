@@ -74,7 +74,7 @@
             // txtLogUsername
             // 
             this.txtLogUsername.Location = new System.Drawing.Point(89, 83);
-            this.txtLogUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLogUsername.Margin = new System.Windows.Forms.Padding(2);
             this.txtLogUsername.Name = "txtLogUsername";
             this.txtLogUsername.Size = new System.Drawing.Size(114, 20);
             this.txtLogUsername.TabIndex = 2;
@@ -83,7 +83,7 @@
             // 
             this.txtLogPassword.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.txtLogPassword.Location = new System.Drawing.Point(89, 120);
-            this.txtLogPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLogPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtLogPassword.Name = "txtLogPassword";
             this.txtLogPassword.Size = new System.Drawing.Size(114, 20);
             this.txtLogPassword.TabIndex = 3;
@@ -93,7 +93,7 @@
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
-            this.splitter1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitter1.Margin = new System.Windows.Forms.Padding(2);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(2, 366);
             this.splitter1.TabIndex = 4;
@@ -184,7 +184,7 @@
             // txtUsername
             // 
             this.txtUsername.Location = new System.Drawing.Point(414, 83);
-            this.txtUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtUsername.Margin = new System.Windows.Forms.Padding(2);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(120, 20);
             this.txtUsername.TabIndex = 13;
@@ -192,7 +192,7 @@
             // txtExperience
             // 
             this.txtExperience.Location = new System.Drawing.Point(413, 268);
-            this.txtExperience.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtExperience.Margin = new System.Windows.Forms.Padding(2);
             this.txtExperience.Name = "txtExperience";
             this.txtExperience.Size = new System.Drawing.Size(120, 20);
             this.txtExperience.TabIndex = 14;
@@ -200,7 +200,7 @@
             // txtPassword
             // 
             this.txtPassword.Location = new System.Drawing.Point(414, 118);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(120, 20);
             this.txtPassword.TabIndex = 15;
@@ -209,7 +209,7 @@
             // txtSalary
             // 
             this.txtSalary.Location = new System.Drawing.Point(414, 195);
-            this.txtSalary.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSalary.Margin = new System.Windows.Forms.Padding(2);
             this.txtSalary.Name = "txtSalary";
             this.txtSalary.Size = new System.Drawing.Size(120, 20);
             this.txtSalary.TabIndex = 16;
@@ -217,7 +217,7 @@
             // txtBonuses
             // 
             this.txtBonuses.Location = new System.Drawing.Point(413, 230);
-            this.txtBonuses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtBonuses.Margin = new System.Windows.Forms.Padding(2);
             this.txtBonuses.Name = "txtBonuses";
             this.txtBonuses.Size = new System.Drawing.Size(120, 20);
             this.txtBonuses.TabIndex = 17;
@@ -225,7 +225,7 @@
             // txtPosition
             // 
             this.txtPosition.Location = new System.Drawing.Point(414, 156);
-            this.txtPosition.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPosition.Margin = new System.Windows.Forms.Padding(2);
             this.txtPosition.Name = "txtPosition";
             this.txtPosition.Size = new System.Drawing.Size(120, 20);
             this.txtPosition.TabIndex = 18;
@@ -233,7 +233,7 @@
             // btnLogin
             // 
             this.btnLogin.Location = new System.Drawing.Point(107, 156);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLogin.Margin = new System.Windows.Forms.Padding(2);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(94, 41);
             this.btnLogin.TabIndex = 19;
@@ -244,12 +244,13 @@
             // btnSignup
             // 
             this.btnSignup.Location = new System.Drawing.Point(407, 292);
-            this.btnSignup.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSignup.Margin = new System.Windows.Forms.Padding(2);
             this.btnSignup.Name = "btnSignup";
             this.btnSignup.Size = new System.Drawing.Size(126, 56);
             this.btnSignup.TabIndex = 20;
             this.btnSignup.Text = "Sign Up";
             this.btnSignup.UseVisualStyleBackColor = true;
+            this.btnSignup.Click += new System.EventHandler(this.btnSignup_Click);
             // 
             // Client
             // 
@@ -277,7 +278,7 @@
             this.Controls.Add(this.txtLogUsername);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblName);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Client";
             this.Text = "Client";
             this.ResumeLayout(false);

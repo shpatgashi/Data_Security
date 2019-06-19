@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Security.Cryptography;
+using System.Net;
 
 namespace SDH_Server
 {
     public partial class Server : Form
     {
         DBCONNECTION conn = new DBCONNECTION();
-
+        Crypto cr = new Crypto();
         private string username;
         private string userPassword;
         private string position;
@@ -40,10 +41,91 @@ namespace SDH_Server
         string request = "";
         string response = "";
         string encResponse = "";
+        string convert = "";
         Thread thread = null;
+        Socket serverSocket;
+        byte[] clientReq;
+        Socket socket()
+        {
+            return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            listener = new TcpListener(2020);
+            //serverSocket = socket();
+            //serverSocket.Bind(new IPEndPoint(0, 2020));
+
+            listener.Start();
+            client = listener.AcceptTcpClient();
+            ns = client.GetStream();
+            try
+            {
+                cr.exportKeys();
+               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+
+            thread = new Thread(DoWork);
+            thread.Start();
+
+
+        }
+
         
-    
-        
+
+
+
+        public void DoWork()
+        {
+            while (true)
+            {
+                byte[] bytesKerkesa = new byte[1024];
+
+               
+                int lenKerkesa = ns.Read(bytesKerkesa, 0, bytesKerkesa.Length);
+                string data = Encoding.UTF8.GetString(bytesKerkesa);
+                MessageBox.Show(data);
+
+                String[] parts = data.Split('~');
+                cr.setIV(Convert.FromBase64String(parts[0]));
+                MessageBox.Show(cr.decryptMessage(parts[1], parts[2]));
+
+
+                //String[] varguKerkeseNenshkrim;
+
+                //varguKerkeseNenshkrim = convert.Split('~');
+                //pe ndajme stringun
+                //pe kthejme ne byte array
+
+                //clientReq = Convert.FromBase64String(varguKerkeseNenshkrim[3]);
+
+                //nenshkrimi = System.Convert.FromBase64String(varguKerkeseNenshkrim[1]);
+            }
+        }
+        private void SetText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.'
+            request = text.ToLower();
+            //if (this.txtKerkesaNenshkruar.InvokeRequired)
+            //{
+            //    SetTextCallback d = new SetTextCallback(SetText);
+            //    this.Invoke(d, new object[] { text });
+            //}
+            //else
+            //{
+            //    kerkesaEnkriptuarKlientit = text;
+            //    txtKerkesaNenshkruar.Text = text;
+            //}
+        }
         private void InsertWorker(string username, string userPassword, string position, double salary, int bonuses, int experience)
         {
             string query = "INSERT INTO worker(username, password, salt, position,salary,bonuses, experience) " +
@@ -129,30 +211,6 @@ namespace SDH_Server
             return rnd.Next(100000, 1000000).ToString();
 
         }
-
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            listener = new System.Net.Sockets.TcpListener(2020);
-            listener.Start();
-            xmlenc rsakey = new xmlenc();
-            try
-            {
-                rsakey.exportPublicKey();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-
-            client = listener.AcceptTcpClient();
-            ns = client.GetStream();
-            // thread = new Thread();
-            //thread.Start();
-
-
-        }
-
         
 
 
@@ -259,6 +317,6 @@ namespace SDH_Server
 
         }
 
-      
+
     }
 }

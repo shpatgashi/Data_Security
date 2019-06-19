@@ -14,34 +14,35 @@ namespace SDH_Client
         DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
 
 
-        public string getKey(string path)
+        //public string getKey(string path)
 
 
-        {
+        //{
 
 
-            StreamReader sr = new StreamReader(path);
-            string key = sr.ReadToEnd();
-            sr.Close();
+        //    StreamReader sr = new StreamReader(path);
+        //    string key = sr.ReadToEnd();
+        //    sr.Close();
 
-            int ModFrom = key.LastIndexOf("<Modulus>") + 9;
-            int ModTo = key.IndexOf("</Modulus>");
+        //    int ModFrom = key.IndexOf("<RSAKeyValue>") ;
+        //    int ModTo = key.LastIndexOf("</RSAKeyValue>")+14;
 
-            int ExpFrom = key.LastIndexOf("<Exponent>") + 10;
-            int ExpTo = key.LastIndexOf("</Exponent>");
+        //    //int ExpFrom = key.LastIndexOf("<Exponent>") + 10;
+        //    //int ExpTo = key.LastIndexOf("</Exponent>");
 
-            string exponent = key.Substring(ExpFrom, ExpTo - ExpFrom);
-            string modulus = key.Substring(ModFrom, ModTo - ModFrom);
+        //    //string exponent = key.Substring(ExpFrom, ExpTo - ExpFrom);
+        //    string modulus = key.Substring(ModFrom, ModTo);
 
-            return modulus + ":" + exponent;
-        }
+        //    return modulus ;
+        //}
 
         public string encryptMessage(string text)
         {
 
-            
+
             objDes.Padding = PaddingMode.Zeros;
             objDes.GenerateKey();
+            objDes.GenerateIV();
             objDes.Mode = CipherMode.CBC;
 
             byte[] bytePlainText = Encoding.UTF8.GetBytes(text);
@@ -65,15 +66,17 @@ namespace SDH_Client
             byte[] byteDesKey = objDes.Key;
 
 
-            RSAParameters rs = new RSAParameters();
 
-            string rsaKey = getKey(path);
-            string[] keys = rsaKey.Split(':');
+            objRsa.FromXmlString(path);
+            //RSAParameters rs = new RSAParameters();
 
-            rs.Modulus = Convert.FromBase64String(keys[0]);
-            rs.Exponent = Convert.FromBase64String(keys[1]);
+            //string rsaKey = getKey(path);
+            //string[] keys = rsaKey.Split(':');
 
-            objRsa.ImportParameters(rs);
+            //rs.Modulus = Convert.FromBase64String(keys[0]);
+            //rs.Exponent = Convert.FromBase64String(keys[1]);
+
+            //objRsa.ImportParameters(rs);
 
 
 
@@ -84,14 +87,32 @@ namespace SDH_Client
 
         }
 
-           public string getIV()
+         public string getIV()
         {
 
             return Convert.ToBase64String(objDes.IV);
 
         }
 
+        public string decryptMessage(byte[] message) 
+        {
 
+            MemoryStream ms = new MemoryStream(message);
+            CryptoStream cs = new CryptoStream(ms, objDes.CreateDecryptor(), CryptoStreamMode.Read);
+
+
+            byte[] bytePlaintext = new byte[ms.Length];
+            cs.Read(bytePlaintext, 0, bytePlaintext.Length);
+            cs.Close();
+            return Encoding.UTF8.GetString(bytePlaintext);
+
+            
+        }
+    
+        public string getDesKey()
+        {
+            return Convert.ToBase64String(objDes.Key);
+        }
     }
 
 
