@@ -43,37 +43,39 @@ namespace SDH_Client
             
             string order = "1/ " + txtLogUsername.Text + "/" + txtLogPassword.Text;
             string toSend = cr.getIV() + "~" + cr.encryptDesKey(key) + "~" + cr.encryptMessage(order) + "~";
+
+
             byte[] byteText = Encoding.UTF8.GetBytes(toSend);
             ns.Write(byteText, 0, byteText.Length);
 
+            MessageBox.Show(cr.getDesKey());
 
 
-          }
-            
+
+        }
+
         public string getRSAKey()
         {
-            string filePath = "C:\\Users\\KobitPC\\Documents\\GitHub\\proj2_SDH19\\SDH_Server\\SDH_Server\\bin\\Debug\\publickey.xml";
+                string filePath = "D:\\Documents\\GitHub\\proj2_SDH19\\SDH_Server\\SDH_Server\\bin\\Debug\\publickey.xml";
 
-            if (File.Exists(filePath))
-            {
-                using (StreamReader sr = new StreamReader(filePath))
+                if (File.Exists(filePath))
                 {
+                    using (StreamReader sr = new StreamReader(filePath))
+                    {
 
-                    string key = sr.ReadToEnd();
+                        string key = sr.ReadToEnd();
+                    
+                        return key;
+                    }
+
+}
+                else return "Error !";
+        }       
 
 
 
-                    return key;
-                }
 
-            }
-            else return "Error !";
-    }       
-    
-               
 
-            
-        
 
         private void btnLogin_Click(object sender, EventArgs e)
         {

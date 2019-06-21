@@ -11,17 +11,15 @@ namespace SDH_Server
     class Crypto
     {
         DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
-
-
-
-
+        RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider();
+        RSACryptoServiceProvider objRsa1 = new RSACryptoServiceProvider();
         public string decryptMessage(string key, string message)
         {
 
             objDes.Padding = PaddingMode.Zeros;
             objDes.Mode = CipherMode.CBC;
 
-            //objDes.Key = decryptDesKey(key);
+            objDes.Key = decryptDesKey(key);
 
             MemoryStream ms = new MemoryStream(Convert.FromBase64String(message));
             CryptoStream cs = new CryptoStream(ms, objDes.CreateDecryptor(), CryptoStreamMode.Read);
@@ -49,10 +47,10 @@ namespace SDH_Server
         }
         public byte[] decryptDesKey(string encKey)
         {
-            RSACryptoServiceProvider objRSA = new RSACryptoServiceProvider();
-
-            objRSA.FromXmlString(exportKeys());
-            byte[] decryptedKey = objRSA.Decrypt(Convert.FromBase64String(encKey), true);
+           
+           
+            
+            byte[] decryptedKey = objRsa1.Decrypt(Convert.FromBase64String(encKey), true);
 
             return decryptedKey;
 
@@ -61,19 +59,17 @@ namespace SDH_Server
 
  
 
-        public string exportKeys()
+        public void exportKeys()
         {
-            using (RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider())
-            {
 
-                string privatexml = objRsa.ToXmlString(true);
+            //  string privatexml = objRsa.ToXmlString(true);
+            RSAParameters param = objRsa.ExportParameters(true);
+            objRsa1.ImportParameters(param);
                 string strXmlParametrat = objRsa.ToXmlString(false);
                 StreamWriter sw = new StreamWriter("publickey.xml");
                 sw.Write(strXmlParametrat);
                 sw.Close();
-
-                return privatexml;
-            }
+            
         }
 
         //public void showKey()

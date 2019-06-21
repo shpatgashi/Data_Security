@@ -64,9 +64,7 @@ namespace SDH_Client
         public string encryptDesKey(string path)
         {
             byte[] byteDesKey = objDes.Key;
-
-
-
+            
             objRsa.FromXmlString(path);
             //RSAParameters rs = new RSAParameters();
 

@@ -25,15 +25,6 @@ namespace SDH_Server
         private double salary;
         private int bonuses;
         private int experience;
-
-
-
-        public Server()
-        {
-
-            InitializeComponent();
-            
-        }
         TcpListener listener;
         TcpClient client;
         NetworkStream ns;
@@ -43,14 +34,19 @@ namespace SDH_Server
         string encResponse = "";
         string convert = "";
         Thread thread = null;
-        Socket serverSocket;
+        //Socket serverSocket;
         byte[] clientReq;
-        Socket socket()
+        //Socket socket()
+        //{
+        //    return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        //}
+        public Server()
         {
-            return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            InitializeComponent();
+            
         }
-
-
+        
+        
         private void btnStart_Click(object sender, EventArgs e)
         {
             listener = new TcpListener(2020);
@@ -60,21 +56,8 @@ namespace SDH_Server
             listener.Start();
             client = listener.AcceptTcpClient();
             ns = client.GetStream();
-            try
-            {
-                cr.exportKeys();
-               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-
-
             thread = new Thread(DoWork);
             thread.Start();
-
 
         }
 
@@ -84,14 +67,22 @@ namespace SDH_Server
 
         public void DoWork()
         {
+            byte[] bytesKerkesa = new byte[1024];
+
             while (true)
             {
-                byte[] bytesKerkesa = new byte[1024];
+                try
+                {
+                    cr.exportKeys();
 
-               
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 int lenKerkesa = ns.Read(bytesKerkesa, 0, bytesKerkesa.Length);
                 string data = Encoding.UTF8.GetString(bytesKerkesa);
-                MessageBox.Show(data);
+                //MessageBox.Show(data);
 
                 String[] parts = data.Split('~');
                 cr.setIV(Convert.FromBase64String(parts[0]));
@@ -227,8 +218,7 @@ namespace SDH_Server
                 getConn.Open();
 
                 MySqlCommand cmd = new MySqlCommand(query, conn.getConnection());
-
-
+                
                 MySqlParameter userParameter = new MySqlParameter("@username", MySqlDbType.Text, 45);
                 userParameter.Value = username;
                 cmd.Parameters.Add(userParameter);
