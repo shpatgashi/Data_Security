@@ -60,7 +60,7 @@ namespace SDH_Client
             return Convert.ToBase64String(byteCiphertext);
         }
 
-
+       
         public string encryptDesKey(string path)
         {
             byte[] byteDesKey = objDes.Key;

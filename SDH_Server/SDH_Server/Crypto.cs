@@ -10,15 +10,21 @@ namespace SDH_Server
 {
     class Crypto
     {
+        public Crypto()
+        {
+            exportKeys();
+        }
+
         DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
         RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider();
-        RSACryptoServiceProvider objRsa1 = new RSACryptoServiceProvider();
-        public string decryptMessage(string key, string message)
+        string privatekey = null;
+
+        public string decryptMessage(string IV, string key, string message)
         {
 
             objDes.Padding = PaddingMode.Zeros;
             objDes.Mode = CipherMode.CBC;
-
+            objDes.IV = Convert.FromBase64String(IV);
             objDes.Key = decryptDesKey(key);
 
             MemoryStream ms = new MemoryStream(Convert.FromBase64String(message));
@@ -28,7 +34,7 @@ namespace SDH_Server
             byte[] bytePlaintext = new byte[ms.Length];
             cs.Read(bytePlaintext, 0, bytePlaintext.Length);
             cs.Close();
-            return Convert.ToBase64String(bytePlaintext);
+            return Encoding.UTF8.GetString(bytePlaintext);
 
             //objDes.IV = Convert.FromBase64String(parts[0]);
 
@@ -47,31 +53,32 @@ namespace SDH_Server
         }
         public byte[] decryptDesKey(string encKey)
         {
-           
-           
-            
-            byte[] decryptedKey = objRsa1.Decrypt(Convert.FromBase64String(encKey), true);
+
+            byte[] decryptedKey = objRsa.Decrypt(Convert.FromBase64String(encKey), true);
 
             return decryptedKey;
 
         }
+        public string showPrivateKey()
+        {
+            return objRsa.ToXmlString(true);
+        }
 
 
- 
 
-        public void exportKeys()
+        public string exportKeys()
         {
 
             //  string privatexml = objRsa.ToXmlString(true);
-            RSAParameters param = objRsa.ExportParameters(true);
-            objRsa1.ImportParameters(param);
-                string strXmlParametrat = objRsa.ToXmlString(false);
-                StreamWriter sw = new StreamWriter("publickey.xml");
-                sw.Write(strXmlParametrat);
-                sw.Close();
-            
-        }
+            string strXmlParametrat = objRsa.ToXmlString(false);
+            StreamWriter sw = new StreamWriter("publickey.xml");
+            sw.Write(strXmlParametrat);
+            sw.Close();
 
+            privatekey = objRsa.ToXmlString(true);
+            return privatekey;
+        }
+     
         //public void showKey()
         //{
         //    StreamReader sr = new StreamReader("privatekey.xml");
@@ -81,11 +88,7 @@ namespace SDH_Server
         //    objRsa.FromXmlString(strXmlParametrat);
         //}
 
-        
 
-        public void setIV(byte[] IV)
-        {
-            objDes.IV = IV;
-        }
+
     }
 }

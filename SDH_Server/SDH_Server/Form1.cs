@@ -61,7 +61,7 @@ namespace SDH_Server
 
         }
 
-        
+
 
 
 
@@ -71,22 +71,21 @@ namespace SDH_Server
 
             while (true)
             {
-                try
-                {
-                    cr.exportKeys();
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
                 int lenKerkesa = ns.Read(bytesKerkesa, 0, bytesKerkesa.Length);
                 string data = Encoding.UTF8.GetString(bytesKerkesa);
                 //MessageBox.Show(data);
 
-                String[] parts = data.Split('~');
-                cr.setIV(Convert.FromBase64String(parts[0]));
-                MessageBox.Show(cr.decryptMessage(parts[1], parts[2]));
+                String[] parts = data.Split('!');
+                string part = parts[0];
+                string iv = part.Substring(0, 12);
+                int ivlen = iv.Length;
+                string key = part.Substring(ivlen, 172);
+                int keylen = key.Length;
+                string message = part.Substring(keylen);
+                
+
+                MessageBox.Show(Convert.ToBase64String(cr.decryptDesKey(key)));
 
 
                 //String[] varguKerkeseNenshkrim;
@@ -99,23 +98,6 @@ namespace SDH_Server
 
                 //nenshkrimi = System.Convert.FromBase64String(varguKerkeseNenshkrim[1]);
             }
-        }
-        private void SetText(string text)
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.'
-            request = text.ToLower();
-            //if (this.txtKerkesaNenshkruar.InvokeRequired)
-            //{
-            //    SetTextCallback d = new SetTextCallback(SetText);
-            //    this.Invoke(d, new object[] { text });
-            //}
-            //else
-            //{
-            //    kerkesaEnkriptuarKlientit = text;
-            //    txtKerkesaNenshkruar.Text = text;
-            //}
         }
         private void InsertWorker(string username, string userPassword, string position, double salary, int bonuses, int experience)
         {

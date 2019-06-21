@@ -42,13 +42,12 @@ namespace SDH_Client
             string key =  getRSAKey();
             
             string order = "1/ " + txtLogUsername.Text + "/" + txtLogPassword.Text;
-            string toSend = cr.getIV() + "~" + cr.encryptDesKey(key) + "~" + cr.encryptMessage(order) + "~";
-
-
+            string toSend = cr.getIV() + cr.encryptDesKey(key)  + cr.encryptMessage(order) + "!";
+            //MessageBox.Show(cr.getIV().Length.ToString() + "\n"+(cr.encryptDesKey(key).Length.ToString()));
             byte[] byteText = Encoding.UTF8.GetBytes(toSend);
             ns.Write(byteText, 0, byteText.Length);
 
-            MessageBox.Show(cr.getDesKey());
+            MessageBox.Show("Client Des key   " + cr.getDesKey());
 
 
 
@@ -56,7 +55,7 @@ namespace SDH_Client
 
         public string getRSAKey()
         {
-                string filePath = "D:\\Documents\\GitHub\\proj2_SDH19\\SDH_Server\\SDH_Server\\bin\\Debug\\publickey.xml";
+            string filePath = "C:\\Users\\KobitPC\\Documents\\GitHub\\proj2_SDH19\\SDH_Server\\SDH_Server\\bin\\Debug\\publickey.xml";
 
                 if (File.Exists(filePath))
                 {
