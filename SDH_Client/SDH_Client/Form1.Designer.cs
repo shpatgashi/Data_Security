@@ -49,6 +49,8 @@
             this.txtPosition = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnSignup = new System.Windows.Forms.Button();
+            this.btnVerify = new System.Windows.Forms.Button();
+            this.rtVerify = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // lblName
@@ -95,7 +97,7 @@
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Margin = new System.Windows.Forms.Padding(2);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(2, 366);
+            this.splitter1.Size = new System.Drawing.Size(2, 443);
             this.splitter1.TabIndex = 4;
             this.splitter1.TabStop = false;
             // 
@@ -252,11 +254,32 @@
             this.btnSignup.UseVisualStyleBackColor = true;
             this.btnSignup.Click += new System.EventHandler(this.btnSignup_Click);
             // 
+            // btnVerify
+            // 
+            this.btnVerify.Location = new System.Drawing.Point(407, 376);
+            this.btnVerify.Margin = new System.Windows.Forms.Padding(2);
+            this.btnVerify.Name = "btnVerify";
+            this.btnVerify.Size = new System.Drawing.Size(126, 56);
+            this.btnVerify.TabIndex = 21;
+            this.btnVerify.Text = "Verify";
+            this.btnVerify.UseVisualStyleBackColor = true;
+            this.btnVerify.Click += new System.EventHandler(this.btnVerify_Click);
+            // 
+            // rtVerify
+            // 
+            this.rtVerify.Location = new System.Drawing.Point(13, 376);
+            this.rtVerify.Name = "rtVerify";
+            this.rtVerify.Size = new System.Drawing.Size(396, 55);
+            this.rtVerify.TabIndex = 22;
+            this.rtVerify.Text = "";
+            // 
             // Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(600, 366);
+            this.ClientSize = new System.Drawing.Size(600, 443);
+            this.Controls.Add(this.rtVerify);
+            this.Controls.Add(this.btnVerify);
             this.Controls.Add(this.btnSignup);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.txtPosition);
@@ -309,6 +332,8 @@
         private System.Windows.Forms.TextBox txtPosition;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnSignup;
+        private System.Windows.Forms.Button btnVerify;
+        private System.Windows.Forms.RichTextBox rtVerify;
     }
 }
 

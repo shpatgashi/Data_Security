@@ -132,5 +132,10 @@ namespace SDH_Client
             }
  
         }
+
+        private void btnVerify_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(verifyToken(rtVerify.Text));
+        }
     }
 }
