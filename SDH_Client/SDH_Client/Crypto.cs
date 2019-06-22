@@ -14,35 +14,13 @@ namespace SDH_Client
         DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
 
 
-        //public string getKey(string path)
-
-
-        //{
-
-
-        //    StreamReader sr = new StreamReader(path);
-        //    string key = sr.ReadToEnd();
-        //    sr.Close();
-
-        //    int ModFrom = key.IndexOf("<RSAKeyValue>") ;
-        //    int ModTo = key.LastIndexOf("</RSAKeyValue>")+14;
-
-        //    //int ExpFrom = key.LastIndexOf("<Exponent>") + 10;
-        //    //int ExpTo = key.LastIndexOf("</Exponent>");
-
-        //    //string exponent = key.Substring(ExpFrom, ExpTo - ExpFrom);
-        //    string modulus = key.Substring(ModFrom, ModTo);
-
-        //    return modulus ;
-        //}
-
         public string encryptMessage(string text)
         {
 
 
-            objDes.Padding = PaddingMode.Zeros;
             objDes.GenerateKey();
             objDes.GenerateIV();
+            objDes.Padding = PaddingMode.Zeros;
             objDes.Mode = CipherMode.CBC;
 
             byte[] bytePlainText = Encoding.UTF8.GetBytes(text);
@@ -63,19 +41,8 @@ namespace SDH_Client
        
         public string encryptDesKey(string path)
         {
-            byte[] byteDesKey = objDes.Key;
-            
+            byte[] byteDesKey = objDes.Key;            
             objRsa.FromXmlString(path);
-            //RSAParameters rs = new RSAParameters();
-
-            //string rsaKey = getKey(path);
-            //string[] keys = rsaKey.Split(':');
-
-            //rs.Modulus = Convert.FromBase64String(keys[0]);
-            //rs.Exponent = Convert.FromBase64String(keys[1]);
-
-            //objRsa.ImportParameters(rs);
-
 
 
             byte[] encryptedKey = objRsa.Encrypt(byteDesKey, true);
@@ -85,12 +52,7 @@ namespace SDH_Client
 
         }
 
-         public string getIV()
-        {
 
-            return Convert.ToBase64String(objDes.IV);
-
-        }
 
         public string decryptMessage(byte[] message) 
         {
@@ -106,7 +68,12 @@ namespace SDH_Client
 
             
         }
-    
+
+        public string getIV()
+        {
+            return Convert.ToBase64String(objDes.IV);
+        }
+
         public string getDesKey()
         {
             return Convert.ToBase64String(objDes.Key);
