@@ -21,11 +21,12 @@ namespace SDH_Server
 
         public string decryptMessage(string IV, string key, string message)
         {
+            byte[] decryptedKey = objRsa.Decrypt(Convert.FromBase64String(key), true);
 
             objDes.Padding = PaddingMode.Zeros;
             objDes.Mode = CipherMode.CBC;
             objDes.IV = Convert.FromBase64String(IV);
-            objDes.Key = decryptDesKey(key);
+            objDes.Key = decryptedKey;
 
             MemoryStream ms = new MemoryStream(Convert.FromBase64String(message));
             CryptoStream cs = new CryptoStream(ms, objDes.CreateDecryptor(), CryptoStreamMode.Read);
@@ -34,61 +35,43 @@ namespace SDH_Server
             byte[] bytePlaintext = new byte[ms.Length];
             cs.Read(bytePlaintext, 0, bytePlaintext.Length);
             cs.Close();
+
             return Encoding.UTF8.GetString(bytePlaintext);
-
-            //objDes.IV = Convert.FromBase64String(parts[0]);
-
-            //byte[] nice = objRsa.Decrypt(Convert.FromBase64String(message), true);
-
-            //byte[] byteText = Convert.FromBase64String(parts[2]);
-            //MemoryStream ms = new MemoryStream(byteText);
-            //CryptoStream cs = new CryptoStream(ms, objDes.CreateDecryptor(), CryptoStreamMode.Read);
-
-
-            //byte[] bytePlaintext = new byte[ms.Length];
-            //cs.Read(bytePlaintext, 0, bytePlaintext.Length);
-            //cs.Close();
-            //return Convert.ToBase64String(nice);
-
+            
         }
-        public byte[] decryptDesKey(string encKey)
-        {
-
-            byte[] decryptedKey = objRsa.Decrypt(Convert.FromBase64String(encKey), true);
-
-            return decryptedKey;
-
-        }
+        
         public string showPrivateKey()
         {
             return objRsa.ToXmlString(true);
         }
 
-
-
-        public string exportKeys()
+        
+        public void exportKeys()
         {
 
-            //  string privatexml = objRsa.ToXmlString(true);
             string strXmlParametrat = objRsa.ToXmlString(false);
             StreamWriter sw = new StreamWriter("publickey.xml");
             sw.Write(strXmlParametrat);
             sw.Close();
-
-            privatekey = objRsa.ToXmlString(true);
-            return privatekey;
         }
-     
-        //public void showKey()
-        //{
-        //    StreamReader sr = new StreamReader("privatekey.xml");
-        //    string strXmlParametrat = sr.ReadToEnd();
-        //    sr.Close();
 
-        //    objRsa.FromXmlString(strXmlParametrat);
-        //}
+        public string encrypt(string message)
+        {
+            objDes.Padding = PaddingMode.Zeros;
+            objDes.Mode = CipherMode.CBC;
 
+            byte[] bytePlainText = Encoding.UTF8.GetBytes(message);
 
+            MemoryStream ms = new MemoryStream();
+            CryptoStream cs = new CryptoStream(
+            ms, objDes.CreateEncryptor(), CryptoStreamMode.Write);
 
+            cs.Write(bytePlainText, 0, bytePlainText.Length);
+            cs.Close();
+
+            byte[] byteCiphertext = ms.ToArray();
+
+            return Convert.ToBase64String(byteCiphertext);
+        }
     }
 }

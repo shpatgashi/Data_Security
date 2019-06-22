@@ -87,11 +87,7 @@ namespace SDH_Client
                 else return "Error !";
         }       
 
-
-
-
-
-
+       
         private void btnLogin_Click(object sender, EventArgs e)
         {
 		login=true;
