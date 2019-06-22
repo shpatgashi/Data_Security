@@ -12,6 +12,9 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Security.Cryptography;
 using System.Net;
+using JWT.Algorithms;
+using JWT;
+using JWT.Serializers;
 
 namespace SDH_Server
 {
@@ -211,15 +214,31 @@ namespace SDH_Server
                 getConn.Close();
                 if (ds.Tables[0].Rows.Count == 0)
                 {
-                    MessageBox.Show("An error occured ...");
+                    string err = "ERROR !";
+                    cr.encrypt(err);
                 }
                 else
                 {
-                    MessageBox.Show("Your info : \nUsername: " + username + "\nPosition : " + ds.Tables[0].Rows[0]["position"].ToString()
-                        + "\nSalary : " + ds.Tables[0].Rows[0]["salary"].ToString() + "\nBonuses : " + ds.Tables[0].Rows[0]["bonuses"].ToString()
-                        + "\nExperience : " + ds.Tables[0].Rows[0]["experience"].ToString());
+                    var payload = new Dictionary<string, object>
+                    {
+                            {"Username : ", username },
+                            {"Position : ", ds.Tables[0].Rows[0]["position"].ToString()},
+                            {"Salary   : ", ds.Tables[0].Rows[0]["salary"].ToString() },
+                            {"Bonuses  :",ds.Tables[0].Rows[0]["bonuses"].ToString() },
+                            {"Experience",ds.Tables[0].Rows[0]["experience"].ToString() }
 
+                     };
+                    IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
+                    IJsonSerializer serializer = new JsonNetSerializer();
+                    IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                    IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
+
+                    var token = encoder.Encode(payload, cr.showPrivateKey());
+                    byte[] byteToken = Encoding.Default.GetBytes(token);
+                    ns.Write(byteToken, 0, byteToken.Length);
                 }
+
+            
             }
             catch (MySqlException ex)
             {
