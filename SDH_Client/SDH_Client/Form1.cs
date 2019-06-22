@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JWT;
+using JWT.Serializers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +17,8 @@ namespace SDH_Client
 {
     public partial class Client : Form
     {
+	private bool login=false;
+	private bool signup=false;
 
         Crypto cr = new Crypto();
         private const int portNum = 2020;
@@ -38,19 +42,31 @@ namespace SDH_Client
 
         public void read()
         {
-            
-            string key =  getRSAKey();
-            
-            string order = "1/ " + txtLogUsername.Text + "/" + txtLogPassword.Text;
-            string toSend = cr.getIV() + cr.encryptDesKey(key)  + cr.encryptMessage(order) + "!";
-            //MessageBox.Show(cr.getIV().Length.ToString() + "\n"+(cr.encryptDesKey(key).Length.ToString()));
-            byte[] byteText = Encoding.UTF8.GetBytes(toSend);
-            ns.Write(byteText, 0, byteText.Length);
-
-            MessageBox.Show("Client Des key   " + cr.getDesKey());
-
-
-
+ 
+            string key = getRSAKey();
+ 
+            if (login)
+            {
+                string order = "1/" + txtLogUsername.Text + "/" + txtLogPassword.Text;
+                string toSend = cr.getIV() + "~" + cr.encryptDesKey(key) + "~" + cr.encryptMessage(order) + "~";
+                byte[] byteText = Encoding.ASCII.GetBytes(toSend);
+                ns.Write(byteText, 0, byteText.Length);
+                login = false;
+                MessageBox.Show("Client side : " + toSend);
+ 
+            }
+            else if (signup)
+            {
+                string order = "2/ " + txtUsername.Text + "/" + txtPassword.Text + "/" + txtPosition.Text + "/"
+                    + txtSalary.Text + "/" + txtBonuses.Text + "/" + txtExperience.Text;
+                string toSend = cr.getIV() + "~" + cr.encryptDesKey(key) + "~" + cr.encryptMessage(order) + "~";
+                byte[] byteText = Encoding.ASCII.GetBytes(toSend);
+                ns.Write(byteText, 0, byteText.Length);
+                signup = false;
+                MessageBox.Show("Client side : "+cr.getDesKey());
+ 
+            }
+ 
         }
 
         public string getRSAKey()
@@ -67,7 +83,7 @@ namespace SDH_Client
                         return key;
                     }
 
-}
+		}
                 else return "Error !";
         }       
 
@@ -78,43 +94,47 @@ namespace SDH_Client
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-
+		login=true;
             read();
-           
-            
-            //ns.Write(Convert.FromBase64String(txtLogUsername.Text), 0, Convert.FromBase64String(txtLogUsername.Text).Length);
+               
 
-
-
-
-            
-
-
-            //}
         }
+
 
         private void btnSignup_Click(object sender, EventArgs e)
         {
-        //    string filePath = "";
-        //    OpenFileDialog opf = new OpenFileDialog();
-        //    if (opf.ShowDialog() == DialogResult.OK)
-        //    {
-        //        filePath = opf.FileName;
-        //    }
-        //    if (File.Exists(filePath))
-        //    {
-        //        using (StreamReader st = new StreamReader(filePath))
-        //        {
+		signup=true;
+		read();
+        }
 
-        //            string order = "2/" + txtUsername.Text + "/" + txtPassword.Text + "/" + txtPosition.Text + "/" + txtSalary.Text
-        //             + "/" + txtBonuses.Text + "/" + txtExperience.Text;
 
-        //            string toSend = cr.getIV() + "~" + cr.encryptDesKey(filePath) + "~" + cr.encryptMessage(order);
-
-        //            txtLogUsername.Text = toSend;
-                    
-        //       }
-        //   }
+        private string verifyToken(string token)
+        {
+ 
+            try
+            {
+                IJsonSerializer serializer = new JsonNetSerializer();
+                IDateTimeProvider provider = new UtcDateTimeProvider();
+                IJwtValidator validator = new JwtValidator(serializer, provider);
+                IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder);
+ 
+                var json = decoder.Decode(token, getRSAKey(), verify: true);
+ 
+                return json;
+            }
+            catch (TokenExpiredException)
+            {
+                MessageBox.Show("Token has expired !!!!");
+                return null;
+            }
+ 
+            catch (SignatureVerificationException)
+            {
+                MessageBox.Show("Token had invalid signature !");
+                return null;
+            }
+ 
         }
     }
 }
